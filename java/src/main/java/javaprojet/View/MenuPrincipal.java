@@ -104,6 +104,7 @@ public class MenuPrincipal {
                     System.out.println("Complément ajouté !");
                 }
                 case 2 -> {
+                    complementVue.Archivedcomplement(scanner);
 
                 }
                 case 3 -> complementVue.afficheComplements();

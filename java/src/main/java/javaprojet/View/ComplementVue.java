@@ -37,4 +37,16 @@ public class ComplementVue extends Vue {
             liste.forEach(System.out::println);
         }
     }
+    public void Archivedcomplement(Scanner scanner) {
+        afficheComplements();
+        int id = Integer.parseInt(saisieChaine(scanner, "Entrez l'ID du complément à archiver : "));
+        var complementOpt = service.selectById(id);
+        if (complementOpt.isPresent()) {
+            Complement complement = complementOpt.get();
+            complement.setArchived(true);
+            System.out.println("Complément archivé : " + complement);
+        } else {
+            System.out.println("Complément avec l'ID " + id + " non trouvé.");
+        }
+    }
 }
