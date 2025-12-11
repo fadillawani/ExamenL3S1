@@ -33,6 +33,6 @@ public class Main {
 
  MenuPrincipal menuPrincipal = new MenuPrincipal(burgerCategorieVue, burgerCategorieService, burgerVue, burgerService);
 
-        menuPrincipal.afficher(scanner);
+        menuPrincipal.affichermenuprincipal(scanner);
     }    
 }

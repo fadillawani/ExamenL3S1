@@ -43,4 +43,18 @@ public class BurgerVue  extends Vue{
             liste.forEach(System.out::println);
         }
     }
+
+
+    public void Archivedburger(Scanner scanner) {
+        afficheBurgers();
+        int id = Integer.parseInt(saisieChaine(scanner, "Entrez l'ID du burger à archiver : "));
+        var burgerOpt = burgerService.selectById(id);
+        if (burgerOpt.isPresent()) {
+            Burger burger = burgerOpt.get();
+            burger.setArchived(true);
+            System.out.println("Burger archivé : " + burger);
+        } else {
+            System.out.println("Burger avec l'ID " + id + " non trouvé.");
+        }
+    }
 }

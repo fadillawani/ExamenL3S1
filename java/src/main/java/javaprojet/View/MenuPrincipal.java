@@ -27,7 +27,7 @@ public class MenuPrincipal {
         this.burgerService = burgerService;
     }
 
-    public void afficher(Scanner scanner) {
+    public void affichermenuprincipal(Scanner scanner) {
         int choix;
 
         do {
@@ -67,16 +67,23 @@ public class MenuPrincipal {
                     burgerCategorieService.createBurgerCategorie(cat);
                     System.out.println("BurgerCategorie ajoutée !");
                 }
-                case 5 -> {
-                  System.out.println("Burger ajouté !");
-                }
+               
                 case 3 -> {
-                    // retour menu précédent
+                    burgerVue.Archivedburger(scanner);
+                    
+                }
+                case 4 -> {
+                    burgerVue.afficheBurgers();
+                    
+                }
+
+                case 5 -> {
+                    System.out.println("Retour au menu principal.");
                 }
                 default -> System.out.println("Choix invalide !");
             }
 
-        } while (choix != 3);
+        } while (choix != 5);
     }
 
     private int lireEntier(Scanner scanner) {

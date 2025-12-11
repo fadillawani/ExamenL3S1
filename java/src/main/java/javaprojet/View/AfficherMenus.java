@@ -19,10 +19,9 @@ public class AfficherMenus {
         System.out.println("\n--- Gestion des Burgers ---");
         System.out.println("1 - Ajouter un Burger");
         System.out.println("2 - Ajouter un Catégorie");
-        System.out.println("3 - Modifier un Burger");
-        System.out.println("4 - Archiver un Burger");
-        System.out.println("5 - Liste des Burgers");
-        System.out.println("6 - Retour");
+        System.out.println("3 - Archiver un Burger");
+        System.out.println("4 - Liste des Burgers");
+        System.out.println("5 - Retour");
         System.out.print("Votre choix : ");
     }
 }
