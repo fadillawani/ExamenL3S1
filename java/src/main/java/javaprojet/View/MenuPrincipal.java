@@ -2,20 +2,29 @@ package javaprojet.View;
 
 import java.util.Scanner;
 
+import javaprojet.Entity.Burger;
 import javaprojet.Entity.BurgerCategorie;
 import javaprojet.Services.BurgerCategorieService;
+import javaprojet.Services.BurgerService;
+
 
 public class MenuPrincipal {
 
     private final BurgerCategorieVue burgerCategorieVue;
     private final BurgerCategorieService burgerCategorieService;
+    private final BurgerVue burgerVue;
+    private final BurgerService burgerService;
 
     public MenuPrincipal(
             BurgerCategorieVue burgerCategorieVue,
-            BurgerCategorieService burgerCategorieService
+            BurgerCategorieService burgerCategorieService,
+            BurgerVue burgerVue,
+            BurgerService burgerService
     ) {
         this.burgerCategorieVue = burgerCategorieVue;
         this.burgerCategorieService = burgerCategorieService;
+        this.burgerVue = burgerVue;
+        this.burgerService = burgerService;
     }
 
     public void afficher(Scanner scanner) {
@@ -49,7 +58,8 @@ public class MenuPrincipal {
 
             switch (choix) {
                 case 1 -> {
-                    
+                    Burger burger = burgerVue.saisieBurger(scanner);
+                    burgerService.createBurger(burger);
                     System.out.println("Burger ajouté !");
                 }
                 case 2 -> {

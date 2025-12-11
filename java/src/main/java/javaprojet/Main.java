@@ -20,10 +20,18 @@ public class Main {
         );
         Scanner scanner = new Scanner(System.in);
         BurgerCategorieRepository burgerCategorieRepository = new BurgerCategorieRepositoryImpl(database);
-         BurgerCategorieService burgerCategorieService = new BurgerCategorieServiceImpl(burgerCategorieRepository);
-        BurgerCategorieVue burgerCategorieVue = new BurgerCategorieVue(burgerCategorieService);
+        BurgerRepository burgerRepository = new BurgerRepositoryImpl(database);
 
- MenuPrincipal menuPrincipal = new MenuPrincipal(burgerCategorieVue, burgerCategorieService);
+
+        BurgerCategorieService burgerCategorieService = new BurgerCategorieServiceImpl(burgerCategorieRepository);
+        BurgerService burgerService = new BurgerServiceImpl(burgerRepository);
+
+
+        BurgerCategorieVue burgerCategorieVue = new BurgerCategorieVue(burgerCategorieService);
+        BurgerVue burgerVue = new BurgerVue(burgerService, burgerCategorieService, burgerCategorieVue);
+
+
+ MenuPrincipal menuPrincipal = new MenuPrincipal(burgerCategorieVue, burgerCategorieService, burgerVue, burgerService);
 
         menuPrincipal.afficher(scanner);
     }    
