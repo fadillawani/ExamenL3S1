@@ -8,6 +8,12 @@ import javaprojet.Services.BurgerCategorieService;
 import javaprojet.Services.BurgerService;
 import javaprojet.Services.ComplementService;
 import javaprojet.Entity.Complement;
+import javaprojet.Entity.Menu;
+import javaprojet.Services.MenuService;
+import javaprojet.Services.MenuBurgerService;
+import javaprojet.Services.MenuComplementService;
+
+
 
 
 
@@ -16,10 +22,12 @@ public class MenuPrincipal {
     private final BurgerCategorieVue burgerCategorieVue;
     private final BurgerVue burgerVue;
     private final ComplementVue complementVue;
+    private final MenuView menuVue;
 
     private final BurgerCategorieService burgerCategorieService;
     private final BurgerService burgerService;
     private final ComplementService complementService;
+    private final MenuService menuService;
 
     public MenuPrincipal(
             BurgerCategorieVue burgerCategorieVue,
@@ -27,7 +35,11 @@ public class MenuPrincipal {
             BurgerVue burgerVue,
             BurgerService burgerService,
             ComplementVue complementVue,
-            ComplementService complementService
+            ComplementService complementService,
+            MenuView menuVue,
+            MenuService menuService,
+            MenuBurgerService menuBurgerService,
+            MenuComplementService menuComplementService
     ) {
         this.burgerCategorieVue = burgerCategorieVue;
         this.burgerCategorieService = burgerCategorieService;
@@ -35,6 +47,9 @@ public class MenuPrincipal {
         this.burgerService = burgerService; 
         this.complementVue = complementVue;
         this.complementService = complementService;
+        this.menuVue = menuVue;
+        this.menuService = menuService;
+        
     }
 
     public void affichermenuprincipal(Scanner scanner) {
@@ -50,6 +65,12 @@ public class MenuPrincipal {
                     break;
                 case 2:
                     afficherMenuComplement(scanner);
+                    break;
+                case 3:
+                    afficherMenuMenu(scanner);
+                    break;
+                case 4:
+                    System.out.println("Au revoir !");
                     break;
                 default:
                     System.out.println("Choix invalide, réessayez.");
@@ -113,6 +134,28 @@ public class MenuPrincipal {
         } while (choix != 4);
     }
 
+
+    private void afficherMenuMenu(Scanner scanner) {
+        int choix = -1;
+        do {
+            AfficherMenus.afficherMenuMenu();
+            choix = lireEntier(scanner);
+
+            switch (choix) {
+                case 1 -> {
+                    Menu menu = menuVue.saisieMenuComplet(scanner);
+                    menuService.update(menu);
+                    System.out.println("Menu ajouté !");
+                }
+                case 2 -> {}
+                case 3 -> {  }
+                case 4 -> menuVue.afficheMenus();
+                case 5 -> {  }
+                default -> System.out.println("Choix invalide !");
+            }
+        } while (choix != 5);
+    }
+
     private int lireEntier(Scanner scanner) {
         String line = scanner.nextLine();
         try {
@@ -121,5 +164,7 @@ public class MenuPrincipal {
             return -1;
         }
     }
+
+    
 }
 

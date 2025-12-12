@@ -2,14 +2,18 @@ package javaprojet.View;
 import javaprojet.Entity.Complement;
 import javaprojet.Entity.Enum.TypeComplement;
 import javaprojet.Services.ComplementService;
+import javaprojet.Services.SaveImage;
+
 import java.util.List;
 import java.util.Scanner;
 
 public class ComplementVue extends Vue {
     private ComplementService service;
+     private SaveImage saveImage ;
 
-    public ComplementVue(ComplementService service) {
+    public ComplementVue(ComplementService service, SaveImage saveImage) {
         this.service = service;
+        this.saveImage = saveImage;
     }
 
     public Complement saisieComplement(Scanner scanner) {
@@ -18,7 +22,12 @@ public class ComplementVue extends Vue {
 
         c.setLibelle(saisieChaine(scanner, "Libellé : "));
         c.setPrix(Double.parseDouble(saisieChaine(scanner, "Prix : ")));
-        c.setImageUrl(saisieChaine(scanner, "URL image : "));
+       String imageUrl = saveImage.uploadImage();
+
+        if (imageUrl != null) {
+            System.out.println("Image disponible à : " + imageUrl);
+        }
+        c.setImageUrl(imageUrl);
         c.setArchived(false);
 
         System.out.println("Type de complément (BOISSON / FRITE)");

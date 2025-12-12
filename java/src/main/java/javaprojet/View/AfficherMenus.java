@@ -33,4 +33,14 @@ public class AfficherMenus {
         System.out.println("4 - Retour");
         System.out.print("Votre choix : ");
     }
+
+    public static void afficherMenuMenu() {
+        System.out.println("\n--- Gestion des Menus ---");
+        System.out.println("1 - Ajouter un Menu");
+        System.out.println("2 - Modifier un Menu");
+        System.out.println("3 - Archiver un Menu");
+        System.out.println("4 - Liste des Menus");
+        System.out.println("5 - Retour");
+        System.out.print("Votre choix : ");
+    }
 }
