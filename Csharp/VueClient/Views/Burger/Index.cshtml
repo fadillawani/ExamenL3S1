@@ -1,0 +1,41 @@
+@model IEnumerable<Burger>
+
+@{
+    ViewData["Title"] = "Nos Burgers";
+}
+
+<section class="bb-burgers-header">
+    <h1>
+        NOS <span>BURGERS</span>
+    </h1>
+</section>
+
+<section class="bb-burgers-section">
+    <div class="bb-burgers-grid">
+
+         @foreach (var burger in Model)
+        {
+            <div class="bb-burger-card">
+                <img src="@burger.image_url"
+                     alt="@burger.libelle" />
+
+                <h3>@burger.libelle</h3>
+
+                <p>@burger.description</p>
+
+                <div class="bb-burger-footer">
+                    <span class="price">
+                        @burger.prix.ToString("0") FCFA
+                    </span>
+
+                    <a asp-action="Details"
+                       asp-route-id="@burger.id"
+                       class="details-btn">
+                        VOIR DETAILS
+                    </a>
+                </div>
+            </div>
+        }
+
+    </div>
+</section>

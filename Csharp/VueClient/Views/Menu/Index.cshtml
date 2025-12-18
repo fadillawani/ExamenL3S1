@@ -1,0 +1,37 @@
+@model IEnumerable<Burger>
+
+@{
+    ViewData["Title"] = "Nos Burgers";
+}
+
+<section class="bb-burgers-header">
+    <h1>
+        NOS <span>MENUS</span>
+    </h1>
+</section>
+
+<section class="bb-menus-section">
+    <div class="bb-menus-grid">
+
+         @foreach (var burger in Model)
+        {
+            <div class="bb-menu-card">
+                <img src="@menu.image_url"
+                     alt="@menu.libelle" />
+
+                <h3>@menu.libelle</h3>
+
+                <p>@menu.description</p>
+
+                <div class="bb-menu-footer">
+                    <span class="price">
+                        @menu.prix.ToString("0") FCFA
+                    </span>
+
+                    
+                </div>
+            </div>
+        }
+
+    </div>
+</section>

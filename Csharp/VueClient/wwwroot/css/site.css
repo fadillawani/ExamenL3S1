@@ -1,31 +1,324 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  margin-bottom: 60px;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #ffffff;
+    color: #111;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+
+/* NAVBAR */
+.bb-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: #ffffff;
+    border-bottom: 1px solid #eee;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+.bb-nav-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Logo */
+.bb-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #111;
+}
+
+.bb-logo-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #DD3322;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Links */
+.bb-nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.bb-nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+}
+
+.bb-nav-links a:hover {
+    color: #DD3322;
+}
+
+/* Actions */
+.bb-nav-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.bb-btn-outline {
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: 2px solid #DD3322;
+    color: #DD3322;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.bb-btn-primary {
+    padding: 8px 20px;
+    border-radius: 20px;
+    background: #DD3322;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+
+/* HERO */
+.hero {
+    position: relative;
+    background: linear-gradient(135deg, #DD3322, #FF6E4E);
+    color: white;
+    overflow: hidden;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.4));
+}
+
+.hero-radial {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 50%, transparent, rgba(0,0,0,0.35));
+}
+
+.hero-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 100px 30px;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.hero-content h1 {
+    font-size: 90px;
+    line-height: 1;
+}
+
+.hero-content h1 span {
+    color: #E9F517;
+}
+
+.hero-content p {
+    font-size: 20px;
+    max-width: 500px;
+    margin: 20px 0 40px;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.hero-image {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.hero-glow {
+    position: absolute;
+    inset: -40px;
+    background: rgba(255, 204, 188, 0.3);
+    filter: blur(80px);
+    border-radius: 50%;
+}
+
+.hero-image img {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    border-radius: 20px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+}
+
+/* BUTTONS */
+.btn {
+    padding: 14px 28px;
+    border-radius: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-secondary {
+    background: #E9F517;
+    color: #000;
+}
+
+.btn-outline {
+    border: 2px solid rgba(255,255,255,0.4);
+    color: white;
+}
+
+.btn-primary {
+    background: #E9F517;
+    color: white;
+}
+
+
+
+
+
+
+
+/* FOOTER */
+.footer {
+    background: #111;
+    color: white;
+    padding: 40px 30px;
+    text-align: center;
+}
+
+.footer-brand {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.footer .logo {
+    width: 36px;
+    height: 36px;
+    background: #DD3322;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* ===== TITRE PAGE ===== */
+.bb-burgers-header {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.bb-burgers-header h1 {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.bb-burgers-header h1 span {
+    color: #d32f2f;
+}
+
+/* ===== GRID ===== */
+.bb-burgers-section {
+    padding: 0 60px 60px;
+}
+
+.bb-burgers-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+}
+
+
+/* ===== CARD ===== */
+.bb-burger-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+    padding: 25px 20px;
+    text-align: center;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.bb-burger-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.18);
+}
+
+/* ===== IMAGE ===== */
+.bb-burger-card img {
+    width: 180px;
+    height: auto;
+    margin-bottom: 18px;
+}
+
+/* ===== TEXTE ===== */
+.bb-burger-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.bb-burger-card p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.4;
+    min-height: 52px;
+}
+
+/* ===== FOOTER ===== */
+.bb-burger-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 18px;
+}
+
+/* ===== PRIX ===== */
+.price {
+    color: #00c853;
+    font-weight: 800;
+    font-size: 15px;
+}
+
+/* ===== BOUTON ===== */
+.details-btn {
+    background: #d32f2f;
+    color: #fff;
+    padding: 7px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s ease;
+}
+
+.details-btn:hover {
+    background: #b71c1c;
 }
