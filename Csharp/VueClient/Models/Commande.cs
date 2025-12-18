@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using VueClient.Enums;
+using VueClient.Models.Enum;
 
 namespace VueClient.Models;
 
@@ -30,6 +30,7 @@ public partial class Commande
     public virtual ICollection<CommandeItem> commande_item { get; set; } = new List<CommandeItem>();
 
     public virtual LivraisonAffectation? livraison_affection { get; set; }
+    
     public StatutCommande Statut { get; set; } = StatutCommande.EN_ATTENTE;
     public TypeRetrait TypeRetrait { get; set; }
 

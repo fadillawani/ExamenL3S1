@@ -15,6 +15,13 @@ public class MenuController : Controller
     {
         var menus = await _context.menu
             .Where(m => m.is_archived == false || m.is_archived == null)
+
+            .Include(m => m.menu_burger)
+                .ThenInclude(mb => mb.burger)
+
+            .Include(m => m.menu_complement)
+                .ThenInclude(mc => mc.complement)
+
             .ToListAsync();
 
         return View(menus);

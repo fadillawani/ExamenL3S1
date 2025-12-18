@@ -1,7 +1,7 @@
-@model IEnumerable<Burger>
+@model IEnumerable<Menu>
 
 @{
-    ViewData["Title"] = "Nos Burgers";
+    ViewData["Title"] = "Nos Menus";
 }
 
 <section class="bb-burgers-header">
@@ -13,7 +13,7 @@
 <section class="bb-menus-section">
     <div class="bb-menus-grid">
 
-         @foreach (var burger in Model)
+        @foreach (var menu in Model)
         {
             <div class="bb-menu-card">
                 <img src="@menu.image_url"
@@ -21,14 +21,33 @@
 
                 <h3>@menu.libelle</h3>
 
-                <p>@menu.description</p>
+                <ul class="bb-menu-details">
+
+                        @* Burgers du menu *@
+                        @foreach (var mb in menu.menu_burger)
+                        {
+                            <li>@mb.burger.libelle</li>
+                        }
+
+                        @* Compléments du menu *@
+                        @foreach (var mc in menu.menu_complement)
+                        {
+                            <li>@mc.complement.libelle</li>
+                        }
+
+
+                </ul>
 
                 <div class="bb-menu-footer">
                     <span class="price">
                         @menu.prix.ToString("0") FCFA
                     </span>
 
-                    
+                    <a asp-action="Commander"
+                       asp-route-id="@menu.id"
+                       class="order-btn">
+                        COMMANDER
+                    </a>
                 </div>
             </div>
         }

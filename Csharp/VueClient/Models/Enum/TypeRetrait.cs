@@ -1,4 +1,4 @@
-namespace VueClient.Enums
+namespace VueClient.Models.Enum
 {
     public enum TypeRetrait
     {

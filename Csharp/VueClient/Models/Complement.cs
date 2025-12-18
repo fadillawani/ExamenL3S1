@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using VueClient.Enums;
+using VueClient.Models.Enum;
 
 namespace VueClient.Models;
 
@@ -16,7 +16,9 @@ public partial class Complement
     public string? image_url { get; set; }
 
     public bool? is_archived { get; set; }
-    public TypeComplement TypeComplement { get; set; }
+    
+
+    public string? TypeComplement { get; set; }
     
 
 

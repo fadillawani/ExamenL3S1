@@ -1,20 +1,32 @@
-using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using VueClient.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+// Récupération de la chaîne de connexion
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+// Activer les enums non mappés globalement (optionnel mais recommandé)
+NpgsqlConnection.GlobalTypeMapper.EnableUnmappedTypes();
+
+// Injection du DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(
-        builder.Configuration.GetConnectionString("DefaultConnection")
-    )
-);
+    options.UseNpgsql(connectionString, npgsqlOptions =>
+    {
+        // Mapper explicitement les enums PostgreSQL si nécessaire
+        npgsqlOptions.MapEnum<VueClient.Models.Enum.StatutCommande>();
+        npgsqlOptions.MapEnum<VueClient.Models.Enum.TypeRetrait>();
+        npgsqlOptions.MapEnum<VueClient.Models.Enum.TypeComplement>();
+        npgsqlOptions.MapEnum<VueClient.Models.Enum.MoyenPaiement>();
+        npgsqlOptions.MapEnum<VueClient.Models.Enum.RoleUser>();
+        npgsqlOptions.MapEnum<VueClient.Models.Enum.StatutLivraison>();
+    }));
+
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -22,15 +34,12 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseRouting();
-
 app.UseAuthorization();
-
-app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

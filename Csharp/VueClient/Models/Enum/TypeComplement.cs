@@ -1,8 +1,9 @@
-namespace VueClient.Enums
+namespace VueClient.Models.Enum
 {
     public enum TypeComplement
     {
-        BOISSON,
-        FRITE
+        FRITE,       
+        BOISSON
+        
     }
 }

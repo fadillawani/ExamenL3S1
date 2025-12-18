@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using VueClient.Enums;
+using VueClient.Models.Enum;
 namespace VueClient.Models;
 
 public partial class LivraisonAffectation
@@ -12,6 +12,7 @@ public partial class LivraisonAffectation
     public long? livreur_id { get; set; }
 
     public long? zone_id { get; set; }
+    
 
     public StatutLivraison Statut { get; set; }= StatutLivraison.EN_ATTENTE;
 

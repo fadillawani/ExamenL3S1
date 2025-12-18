@@ -9,6 +9,7 @@ public partial class Menu
 
     public string libelle { get; set; } = null!;
 
+
     public string? image_url { get; set; }
 
     public bool? is_archived { get; set; }
