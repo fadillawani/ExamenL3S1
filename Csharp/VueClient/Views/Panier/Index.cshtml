@@ -1,0 +1,60 @@
+@using System.Linq
+@model VueClient.ViewModel.PanierVM
+
+@{
+    ViewData["Title"] = "Mon panier";
+}
+
+<h2 class="mb-4">Mon panier</h2>
+
+@if (Model.Items == null || !Model.Items.Any())
+{
+    <div class="alert alert-info">
+        Votre panier est vide.
+    </div>
+}
+else
+{
+    <table class="table table-bordered align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Type</th>
+                <th>Libellé</th>
+                <th class="text-center">Quantité</th>
+                <th class="text-end">Prix unitaire</th>
+                <th class="text-end">Total</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.Type</td>
+                    <td>@item.Libelle</td>
+                    <td class="text-center">@item.Quantite</td>
+                    <td class="text-end">@item.PrixUnitaire.ToString("N0") FCFA</td>
+                    <td class="text-end">@item.PrixTotal.ToString("N0") FCFA</td>
+                    <td class="text-center">
+                        <form asp-action="RemoveItem" method="post">
+                            <input type="hidden" name="itemId" value="@item.PanierItemId" />
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                Supprimer
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="d-flex justify-content-between mt-4">
+        <h4>Total : <strong>@Model.Total.ToString("N0") FCFA</strong></h4>
+
+        <form asp-action="Valider" method="post">
+            <button type="submit" class="btn btn-success btn-lg">
+                Valider la commande
+            </button>
+        </form>
+    </div>
+}

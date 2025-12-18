@@ -19,4 +19,27 @@ public class BurgerController : Controller
 
         return View(burgers);
     }
+
+   
+public IActionResult Detail(long id)
+{
+    var burger = _context.burger
+        .FirstOrDefault(b => b.id == id && (b.is_archived == false || b.is_archived == null));
+
+    if (burger == null)
+        return NotFound();
+
+    var complements = _context.complement
+        .Where(c => c.is_archived == false || c.is_archived == null)
+        .ToList();
+
+    var vm = new BurgerDetailsViewModel
+    {
+        Burger = burger,
+        Complements = complements
+    };
+
+    return View(vm);
+}
+
 }

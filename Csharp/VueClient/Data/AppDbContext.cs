@@ -30,6 +30,9 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<Quartier> quartier { get; set; }
     public virtual DbSet<Users> users { get; set; }
     public virtual DbSet<Zone> zone { get; set; }
+    public DbSet<Panier> panier { get; set; }
+public DbSet<PanierItem> panier_item { get; set; }
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 {
@@ -250,6 +253,62 @@ public partial class AppDbContext : DbContext
             entity.HasKey(e => e.id).HasName("zone_pkey");
             entity.Property(e => e.nom).HasMaxLength(150);
         });
+
+        modelBuilder.Entity<Panier>(entity =>
+{
+    entity.HasKey(e => e.id).HasName("panier_pkey");
+
+    entity.Property(e => e.created_at)
+        .HasDefaultValueSql("now()")
+        .HasColumnType("timestamp without time zone");
+
+    entity.Property(e => e.updated_at)
+        .HasDefaultValueSql("now()")
+        .HasColumnType("timestamp without time zone");
+
+    entity.Property(e => e.is_validated)
+        .HasDefaultValue(false);
+
+    entity.HasOne(d => d.client)
+        .WithMany(p => p.panier)
+        .HasForeignKey(d => d.client_id)
+        .HasConstraintName("panier_client_id_fkey");
+});
+
+modelBuilder.Entity<PanierItem>(entity =>
+{
+    entity.HasKey(e => e.id).HasName("panier_item_pkey");
+
+    entity.HasOne(d => d.panier)
+        .WithMany(p => p.panier_item)
+        .HasForeignKey(d => d.panier_id)
+        .OnDelete(DeleteBehavior.Cascade)
+        .HasConstraintName("panier_item_panier_id_fkey");
+
+    entity.HasOne(d => d.burger)
+        .WithMany()
+        .HasForeignKey(d => d.burger_id)
+        .HasConstraintName("panier_item_burger_id_fkey");
+
+    entity.HasOne(d => d.menu)
+        .WithMany()
+        .HasForeignKey(d => d.menu_id)
+        .HasConstraintName("panier_item_menu_id_fkey");
+
+    entity.HasOne(d => d.complement)
+        .WithMany()
+        .HasForeignKey(d => d.complement_id)
+        .HasConstraintName("panier_item_complement_id_fkey");
+
+    entity.HasCheckConstraint(
+        "CK_panier_item_one_product",
+        "(CASE WHEN burger_id IS NOT NULL THEN 1 ELSE 0 END + " +
+        "CASE WHEN menu_id IS NOT NULL THEN 1 ELSE 0 END + " +
+        "CASE WHEN complement_id IS NOT NULL THEN 1 ELSE 0 END) = 1"
+    );
+});
+
+
 
         OnModelCreatingPartial(modelBuilder);
     }

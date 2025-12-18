@@ -1,0 +1,48 @@
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Connexion";
+}
+
+<link rel="stylesheet" href="~/css/auth.css" />
+
+<div class="auth-container">
+
+    <div class="auth-tabs">
+        <a class="active">Connexion</a>
+        <a asp-action="Register">Inscription</a>
+    </div>
+
+    <div class="auth-card">
+        <h2>BON RETOUR !</h2>
+        <p class="subtitle">Connectez-vous</p>
+
+        <form asp-action="Login" method="post">
+
+            <div class="form-group">
+                <label>Email ou Téléphone</label>
+                <input asp-for="Login" class="form-control" />
+                <span asp-validation-for="Login" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Mot de passe</label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn-login">Connexion</button>
+
+            <div class="forgot">
+                <a href="#">Mot de passe oublié ?</a>
+            </div>
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="error">
+                    Identifiants incorrects
+                </div>
+            }
+
+        </form>
+    </div>
+</div>

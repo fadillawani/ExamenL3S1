@@ -1,0 +1,67 @@
+@model BurgerDetailsViewModel
+
+@{
+    ViewData["Title"] = "Détails Burger";
+}
+
+<div class="container mt-5">
+    <div class="row align-items-start">
+
+        <!-- IMAGE -->
+        <div class="col-md-6 text-center">
+            <img src="@Model.Burger.image_url"
+                 alt="@Model.Burger.libelle"
+                 class="img-fluid rounded shadow"
+                 style="max-height: 450px;" />
+        </div>
+
+        <!-- INFOS -->
+        <div class="col-md-6">
+            <h1 class="fw-bold text-uppercase">@Model.Burger.libelle</h1>
+
+            <h3 class="text-danger fw-bold mt-3">
+                @Model.Burger.prix.ToString("N0") FCFA
+            </h3>
+
+            <p class="text-muted mt-4">
+                @Model.Burger.description
+            </p>
+
+            <hr />
+
+            <!-- FORMULAIRE AJOUT PANIER -->
+         @if (User.Identity?.IsAuthenticated ?? false)
+{
+    <form asp-controller="Panier" asp-action="AjouterAuPanier" method="post">
+        <input type="hidden" name="burgerId" value="@Model.Burger.id" />
+
+        @foreach (var complement in Model.Complements)
+        {
+            <div class="card p-3 mb-3 shadow-sm">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <input type="checkbox" name="complementIds" value="@complement.id" class="form-check-input me-2" />
+                        <strong>@complement.libelle.ToUpper()</strong>
+                    </div>
+                    <span class="fw-bold">@complement.prix.ToString("N0") FCFA</span>
+                </div>
+            </div>
+        }
+
+        <div class="mt-3 mb-4">
+            <label for="quantite" class="form-label fw-bold">Quantité</label>
+            <input type="number" id="quantite" name="quantite" value="1" min="1" class="form-control" style="width: 100px;">
+        </div>
+
+        <button type="submit" class="btn btn-danger btn-lg px-5">
+            Ajouter au panier
+        </button>
+    </form>
+}
+else
+{
+    <a class="btn btn-danger btn-lg px-5"
+       href="@Url.Action("Login", "Account", new { returnUrl = ViewContext.HttpContext.Request.Path })">
+        Connectez-vous pour ajouter au panier
+    </a>
+}
