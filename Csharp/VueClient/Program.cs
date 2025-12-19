@@ -28,6 +28,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+
 // DbContext avec PostgreSQL et mapping d'enums
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
