@@ -15,12 +15,12 @@ public partial class Users
     public string email { get; set; } = null!;
     public string password { get; set; } = null!;
 
-    public DateTime? created_at { get; set; } = DateTime.Now;
+    public DateTime? created_at { get; set; } = DateTime.UtcNow;
     public string? role { get; set; } = "CLIENT"; // valeur par défaut en string
     public bool? is_archived { get; set; } = false; // booléen correct
 
     public virtual ICollection<Commande> commande { get; set; } = new List<Commande>();
-    public virtual ICollection<LivraisonAffectation> livraison_affection { get; set; } = new List<LivraisonAffectation>();
+    public virtual ICollection<LivraisonAffectation> livraison_affectation { get; set; } = new List<LivraisonAffectation>();
     public virtual ICollection<Panier> panier { get; set; }
     = new List<Panier>();
 

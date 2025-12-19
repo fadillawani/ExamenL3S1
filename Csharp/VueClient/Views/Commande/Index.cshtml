@@ -1,0 +1,36 @@
+@model IEnumerable<VueClient.Models.Commande>
+
+<div class="page-container">
+    <h2>Mes commandes</h2>
+
+    @foreach (var commande in Model)
+    {
+        <div class="commande-card">
+            <div class="commande-left">
+                <div class="commande-id">
+                    CMD-@commande.Id
+                    <span class="badge-status">
+                        @commande.Etat
+                    </span>
+                </div>
+
+                <div class="commande-date">
+                    @commande.DateCommande.ToString("dd/MM/yyyy - HH:mm")
+                </div>
+            </div>
+
+            <div class="commande-right">
+                <div class="commande-prix">
+                    @commande.PrixTotal FCFA
+                </div>
+
+                <a asp-controller="Commande"
+                   asp-action="Details"
+                   asp-route-id="@commande.Id"
+                   class="btn-details">
+                    Voir détails
+                </a>
+            </div>
+        </div>
+    }
+</div>

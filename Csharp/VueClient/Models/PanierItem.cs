@@ -1,5 +1,3 @@
-using System;
-
 namespace VueClient.Models;
 
 public partial class PanierItem

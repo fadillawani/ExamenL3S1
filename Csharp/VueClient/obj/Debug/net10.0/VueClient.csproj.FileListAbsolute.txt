@@ -123,7 +123,7 @@ C:\Users\Acer\OneDrive\Bureau\Cours S5\ExamenL3S1\Csharp\VueClient\obj\Debug\net
 C:\Users\Acer\OneDrive\Bureau\Cours S5\ExamenL3S1\Csharp\VueClient\obj\Debug\net10.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\Acer\OneDrive\Bureau\Cours S5\ExamenL3S1\Csharp\VueClient\obj\Debug\net10.0\scopedcss\bundle\VueClient.styles.css
 C:\Users\Acer\OneDrive\Bureau\Cours S5\ExamenL3S1\Csharp\VueClient\obj\Debug\net10.0\scopedcss\projectbundle\VueClient.bundle.scp.css
-C:\Users\Acer\OneDrive\Bureau\Cours S5\ExamenL3S1\Csharp\VueClient\obj\Debug\net10.0\compressed\ktrkpyrtm0-{0}-zhioj53qcp-zhioj53qcp.gz
+C:\Users\Acer\OneDrive\Bureau\Cours S5\ExamenL3S1\Csharp\VueClient\obj\Debug\net10.0\compressed\ktrkpyrtm0-{0}-z277auig85-z277auig85.gz
 C:\Users\Acer\OneDrive\Bureau\Cours S5\ExamenL3S1\Csharp\VueClient\obj\Debug\net10.0\compressed\bjx9xqu09q-{0}-61n19gt1b8-61n19gt1b8.gz
 C:\Users\Acer\OneDrive\Bureau\Cours S5\ExamenL3S1\Csharp\VueClient\obj\Debug\net10.0\compressed\cy5ieveebh-{0}-xtxxf3hu2r-xtxxf3hu2r.gz
 C:\Users\Acer\OneDrive\Bureau\Cours S5\ExamenL3S1\Csharp\VueClient\obj\Debug\net10.0\compressed\0wwzbucrv5-{0}-bqjiyaj88i-bqjiyaj88i.gz

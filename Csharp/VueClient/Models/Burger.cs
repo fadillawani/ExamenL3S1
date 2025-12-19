@@ -21,7 +21,7 @@ public partial class Burger
 
     public virtual BurgerCategorie? burger_categorie { get; set; }
 
-    public virtual ICollection<CommandeItem> commande_item { get; set; } = new List<CommandeItem>();
+    public ICollection<PanierItem> panier_item { get; set; } = new List<PanierItem>();
 
     public virtual ICollection<MenuBurger> menu_burger { get; set; } = new List<MenuBurger>();
 }

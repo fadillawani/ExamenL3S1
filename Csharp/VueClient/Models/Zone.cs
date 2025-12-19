@@ -11,7 +11,7 @@ public partial class Zone
 
     public double prix_livraison { get; set; }
 
-    public virtual ICollection<LivraisonAffectation> livraison_affection { get; set; } = new List<LivraisonAffectation>();
+    public virtual ICollection<LivraisonAffectation> livraison_affectation { get; set; } = new List<LivraisonAffectation>();
 
     public virtual ICollection<Quartier> quartier { get; set; } = new List<Quartier>();
 }

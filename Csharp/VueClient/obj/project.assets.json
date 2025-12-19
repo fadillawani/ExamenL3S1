@@ -2729,6 +2729,7 @@
   "projectFileDependencyGroups": {
     "net10.0": [
       "Microsoft.AspNetCore.Authentication.Cookies >= 2.3.0",
+      "Microsoft.EntityFrameworkCore.Relational >= 10.0.1",
       "Microsoft.EntityFrameworkCore.Tools >= 10.0.1",
       "Npgsql >= 10.0.0",
       "Npgsql.EntityFrameworkCore.PostgreSQL >= 10.0.0"
@@ -2780,6 +2781,10 @@
           "Microsoft.AspNetCore.Authentication.Cookies": {
             "target": "Package",
             "version": "[2.3.0, )"
+          },
+          "Microsoft.EntityFrameworkCore.Relational": {
+            "target": "Package",
+            "version": "[10.0.1, )"
           },
           "Microsoft.EntityFrameworkCore.Tools": {
             "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",

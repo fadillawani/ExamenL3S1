@@ -20,43 +20,51 @@ public class PanierController : Controller
 
     // GET: /Panier
     public async Task<IActionResult> Index()
+{
+    long clientId = GetCurrentUserId();
+    if (clientId == 0) return RedirectToAction("Login", "Auth");
+
+    var panier = await _context.panier
+        .Include(p => p.panier_item)
+            .ThenInclude(i => i.burger)
+        .Include(p => p.panier_item)
+            .ThenInclude(i => i.menu)
+        .Include(p => p.panier_item)
+            .ThenInclude(i => i.complement)
+        .FirstOrDefaultAsync(p => p.client_id == clientId && !p.is_validated);
+
+    var panierVm = new PanierVM();
+
+    if (panier != null)
     {
-        long clientId = GetCurrentUserId();
-        if (clientId == 0) return RedirectToAction("Login", "Auth");
-
-        var panier = await _context.panier
-            .Include(p => p.panier_item)
-                .ThenInclude(i => i.burger)
-            .Include(p => p.panier_item)
-                .ThenInclude(i => i.menu)
-            .Include(p => p.panier_item)
-                .ThenInclude(i => i.complement)
-            .FirstOrDefaultAsync(p => p.client_id == clientId && p.is_validated == false);
-
-        if (panier == null)
-            return View(new PanierVM());
-
-        var vm = new PanierVM
+        panierVm.PanierId = panier.id;
+        panierVm.Items = panier.panier_item.Select(i => new PanierItemVM
         {
-            PanierId = panier.id,
-            Items = panier.panier_item.Select(i => new PanierItemVM
-            {
-                PanierItemId = i.id,
-                Quantite = i.quantite,
-                PrixTotal = i.prix_total,
-                Libelle = i.burger != null ? i.burger.libelle :
-                          i.menu != null ? i.menu.libelle :
-                          i.complement!.libelle,
-                PrixUnitaire = i.burger != null ? i.burger.prix :
-                               i.menu != null ? i.menu.prix :
-                               i.complement!.prix,
-                Type = i.burger != null ? "Burger" :
-                       i.menu != null ? "Menu" : "Complément"
-            }).ToList()
-        };
+            PanierItemId = i.id,
+            Quantite = i.quantite,
+            PrixTotal = i.prix_total,
+            Libelle = i.burger != null ? i.burger.libelle :
+                      i.menu != null ? i.menu.libelle :
+                      i.complement!.libelle,
+            PrixUnitaire = i.burger != null ? i.burger.prix :
+                           i.menu != null ? i.menu.prix :
+                           i.complement!.prix,
+            Type = i.burger != null ? "Burger" :
+                   i.menu != null ? "Menu" : "Complément"
+        }).ToList();
 
-        return View(vm);
+        panierVm.Zones = await _context.zone.ToListAsync();
     }
+
+    var vm = new PanierValidationVM
+    {
+        Panier = panierVm,
+        Commande = new ValiderCommandeVM()
+    };
+
+    return View(vm);
+}
+
 
     // POST: /Panier/AjouterAuPanier
     [HttpPost]
@@ -77,7 +85,7 @@ public class PanierController : Controller
             {
                 client_id = clientId,
                 is_validated = false,
-                created_at = DateTime.Now,
+                created_at = DateTime.UtcNow,
                 panier_item = new List<PanierItem>()
             };
             _context.panier.Add(panier);
@@ -152,7 +160,7 @@ public async Task<IActionResult> AjouterMenuAuPanier(long menuId, int quantite)
         {
             client_id = clientId,
             is_validated = false,
-            created_at = DateTime.Now,
+            created_at = DateTime.UtcNow,
             panier_item = new List<PanierItem>()
         };
         _context.panier.Add(panier);

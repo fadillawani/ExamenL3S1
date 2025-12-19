@@ -22,7 +22,6 @@ public partial class Complement
     
 
 
-    public virtual ICollection<CommandeItem> commande_item { get; set; } = new List<CommandeItem>();
 
     public virtual ICollection<MenuComplement> menu_complement { get; set; } = new List<MenuComplement>();
 }

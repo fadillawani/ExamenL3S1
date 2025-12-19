@@ -1,5 +1,6 @@
 @using System.Linq
-@model VueClient.ViewModel.PanierVM
+@using VueClient.Models.Enum
+@model VueClient.ViewModel.PanierValidationVM
 
 @{
     ViewData["Title"] = "Mon panier";
@@ -7,7 +8,7 @@
 
 <h2 class="mb-4">Mon panier</h2>
 
-@if (Model.Items == null || !Model.Items.Any())
+@if (Model.Panier.Items == null || !Model.Panier.Items.Any())
 {
     <div class="alert alert-info">
         Votre panier est vide.
@@ -27,7 +28,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.Items)
+            @foreach (var item in Model.Panier.Items)
             {
                 <tr>
                     <td>@item.Type</td>
@@ -48,13 +49,62 @@ else
         </tbody>
     </table>
 
-    <div class="d-flex justify-content-between mt-4">
-        <h4>Total : <strong>@Model.Total.ToString("N0") FCFA</strong></h4>
+    <!-- FORMULAIRE DE VALIDATION -->
+    <form asp-controller="Commande" asp-action="Valider" method="post" class="mt-4">
 
-        <form asp-action="Valider" method="post">
-            <button type="submit" class="btn btn-success btn-lg">
-                Valider la commande
-            </button>
-        </form>
-    </div>
+        <h4>Total : <strong>@Model.Panier.Total.ToString("N0") FCFA</strong></h4>
+
+        <hr />
+
+        <!-- TYPE DE RETRAIT -->
+        <div class="mb-3">
+            <label class="form-label">Type de retrait</label>
+            <select name="TypeRetrait" class="form-select" required id="typeRetrait">
+                <option value="">-- Choisir --</option>
+                <option value="@TypeRetrait.SUR_PLACE">Sur place</option>
+                <option value="@TypeRetrait.LIVRAISON">Livraison</option>
+            </select>
+        </div>
+
+        <!-- ZONE -->
+        <div class="mb-3" id="zoneBlock" style="display:none;">
+            <label class="form-label">Zone de livraison</label>
+            <select name="ZoneId" class="form-select">
+                <option value="">-- Choisir une zone --</option>
+                @foreach (var z in Model.Commande.Zones)
+                {
+                    <option value="@z.id">@z.nom</option>
+                }
+            </select>
+        </div>
+
+        <!-- RUE / ADRESSE -->
+        <div class="mb-3" id="rueBlock" style="display:none;">
+            <label class="form-label">Rue / Adresse</label>
+            <input type="text" name="Rue" class="form-control" placeholder="Ex: Rue 12, Médina" />
+        </div>
+
+        <!-- MOYEN DE PAIEMENT -->
+        <div class="mb-3">
+            <label for="MoyenPaiement" class="form-label">Moyen de paiement</label>
+            <select asp-for="Commande.MoyenPaiement" class="form-select" id="MoyenPaiement">
+                <option value="@MoyenPaiement.WAVE">WAVE</option>
+                <option value="@MoyenPaiement.OM">ORANGE MONEY</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success btn-lg">
+            Valider la commande
+        </button>
+    </form>
+}
+
+@section Scripts {
+    <script>
+        document.getElementById("typeRetrait").addEventListener("change", function () {
+            const show = this.value === "LIVRAISON";
+            document.getElementById("zoneBlock").style.display = show ? "block" : "none";
+            document.getElementById("rueBlock").style.display = show ? "block" : "none";
+        });
+    </script>
 }

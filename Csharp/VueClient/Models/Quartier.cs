@@ -11,7 +11,6 @@ public partial class Quartier
 
     public long? zone_id { get; set; }
 
-    public virtual ICollection<Commande> commande { get; set; } = new List<Commande>();
 
     public virtual Zone? zone { get; set; }
 }

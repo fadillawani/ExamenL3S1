@@ -1,39 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using VueClient.Models.Enum;
+using System.ComponentModel.DataAnnotations.Schema; 
 
-namespace VueClient.Models;
-
-
-public partial class Commande
+namespace VueClient.Models
 {
-    public long id { get; set; }
+    public class Commande
+    {
+        [Column("id")]
+        public long Id { get; set; }
 
-    public long? client_id { get; set; }
+        // Relation vers le panier
+        [Column("panier_id")]
+        public long PanierId { get; set; }
+        public Panier Panier { get; set; } = null!;
+         [Column("date_commande")]
+        public DateTime DateCommande { get; set; } = DateTime.UtcNow;
+        [Column("prix_total")]
+        public double PrixTotal { get; set; } = 0;
+        [Column("user_id")]
+        public long UserId { get; set; }         
+        public Users User { get; set; } = null!;  
 
-    public string? adresse { get; set; }
+        [Column("etat")]
+        public StatutCommande Etat { get; set; } = StatutCommande.EN_ATTENTE;
+        [Column("paiement_id")]
+        public long? PaiementId { get; set; }
+        public virtual Paiement? Paiement { get; set; }
+        [Column("livraison_affectation_id")] // corrige ici
+        public long? LivraisonAffectationId { get; set; }
 
-    public long? quartier_id { get; set; }
+        public virtual LivraisonAffectation? LivraisonAffectation { get; set; }
 
-    public double montant_hors_livraison { get; set; }
-
-    public double montant_total { get; set; }
-
-    public DateTime? created_at { get; set; }
-
-    public DateTime? updated_at { get; set; }
-
-    public bool? is_paid { get; set; }
-
-    public virtual Users? client { get; set; }
-
-    public virtual ICollection<CommandeItem> commande_item { get; set; } = new List<CommandeItem>();
-
-    public virtual LivraisonAffectation? livraison_affection { get; set; }
-    
-    public StatutCommande Statut { get; set; } = StatutCommande.EN_ATTENTE;
-    public TypeRetrait TypeRetrait { get; set; }
-
-    public virtual Paiement? paiement { get; set; }
-    public virtual Quartier? quartier { get; set; }
+    }
 }

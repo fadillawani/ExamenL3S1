@@ -3,6 +3,7 @@ using VueClient.Data;
 using Microsoft.EntityFrameworkCore;
 using VueClient.Services;
 using VueClient.Services.Impl;
+using VueClient.Models.Enum;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,19 +30,19 @@ builder.Services.AddSession(options =>
 
 // DbContext avec PostgreSQL et mapping d'enums
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-NpgsqlConnection.GlobalTypeMapper.EnableUnmappedTypes();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString, npgsqlOptions =>
     {
-        npgsqlOptions.MapEnum<VueClient.Models.Enum.StatutCommande>();
-        npgsqlOptions.MapEnum<VueClient.Models.Enum.TypeRetrait>();
-        npgsqlOptions.MapEnum<VueClient.Models.Enum.TypeComplement>();
-        npgsqlOptions.MapEnum<VueClient.Models.Enum.MoyenPaiement>();
-        npgsqlOptions.MapEnum<VueClient.Models.Enum.RoleUser>();
-        npgsqlOptions.MapEnum<VueClient.Models.Enum.StatutLivraison>();
+        npgsqlOptions.MapEnum<StatutCommande>("statut_commande");
+        npgsqlOptions.MapEnum<TypeRetrait>("type_retrait");
+        npgsqlOptions.MapEnum<TypeComplement>("type_complement");
+        npgsqlOptions.MapEnum<MoyenPaiement>("moyen_paiement");
+        npgsqlOptions.MapEnum<RoleUser>("role_user");
+        npgsqlOptions.MapEnum<StatutLivraison>("statut_livraison");
     })
 );
+
 
 // MVC
 builder.Services.AddControllersWithViews();

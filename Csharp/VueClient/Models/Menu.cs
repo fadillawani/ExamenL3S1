@@ -16,7 +16,6 @@ public partial class Menu
 
     public double prix { get; set; }
 
-    public virtual ICollection<CommandeItem> commande_item { get; set; } = new List<CommandeItem>();
 
     public virtual ICollection<MenuBurger> menu_burger { get; set; } = new List<MenuBurger>();
 
