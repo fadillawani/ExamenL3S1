@@ -12,7 +12,7 @@ namespace VueClient.Data
             _context = context;
         }
 
-        public Burger GetBurgerById(int id)
+        public Burger? GetBurgerById(int id)
         {
             return _context.burger.Find(id);
         }

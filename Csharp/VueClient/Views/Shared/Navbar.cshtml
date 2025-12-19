@@ -19,7 +19,7 @@
 
         <!-- Actions -->
         <div class="bb-nav-actions">
-            @if (User.Identity.IsAuthenticated)
+           @if (User?.Identity?.IsAuthenticated == true)
             {
                 <!-- Déconnexion -->
                 <form method="post" asp-controller="Auth" asp-action="Logout" style="display:inline;">

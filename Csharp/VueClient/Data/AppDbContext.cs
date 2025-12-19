@@ -251,7 +251,16 @@ public partial class AppDbContext : DbContext
         // =====================
        modelBuilder.Entity<PanierItem>(entity =>
 {
-    entity.ToTable("panier_item");
+    entity.ToTable(tb =>
+    {
+        tb.HasCheckConstraint(
+            "CK_panier_item_one_product",
+            "(CASE WHEN burger_id IS NOT NULL THEN 1 ELSE 0 END + " +
+            "CASE WHEN menu_id IS NOT NULL THEN 1 ELSE 0 END + " +
+            "CASE WHEN complement_id IS NOT NULL THEN 1 ELSE 0 END) = 1"
+        );
+    });
+
     entity.HasKey(e => e.id);
 
     entity.Property(e => e.panier_id).HasColumnName("panier_id");
@@ -282,13 +291,6 @@ public partial class AppDbContext : DbContext
         .WithMany()
         .HasForeignKey(e => e.complement_id)
         .HasConstraintName("panier_item_complement_id_fkey");
-
-    entity.HasCheckConstraint(
-        "CK_panier_item_one_product",
-        "(CASE WHEN burger_id IS NOT NULL THEN 1 ELSE 0 END + " +
-        "CASE WHEN menu_id IS NOT NULL THEN 1 ELSE 0 END + " +
-        "CASE WHEN complement_id IS NOT NULL THEN 1 ELSE 0 END) = 1"
-    );
 });
 
 

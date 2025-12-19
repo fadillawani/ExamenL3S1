@@ -13,47 +13,47 @@
 <section class="bb-menus-section">
     <div class="bb-menus-grid">
 
-        @foreach (var menu in Model)
-        {
-            <div class="bb-menu-card">
-                <img src="@menu.image_url"
-                     alt="@menu.libelle" />
+        @if (Model != null)
+{
+    foreach (var menu in Model)
+    {
+        <div class="bb-menu-card">
+            <img src="@menu.image_url" alt="@menu.libelle" />
+            <h3>@menu.libelle</h3>
 
-                <h3>@menu.libelle</h3>
+            <ul class="bb-menu-details">
+                @foreach (var mb in menu.menu_burger ?? Enumerable.Empty<MenuBurger>())
+                {
+                    <li>@mb.burger?.libelle</li>
+                }
+            </ul>
 
-                <ul class="bb-menu-details">
-                    @* Burgers du menu *@
-                    @foreach (var mb in menu.menu_burger)
-                    {
-                        <li>@mb.burger.libelle</li>
-                    }
-                </ul>
+            <div class="bb-menu-footer">
+                <span class="price">@menu.prix.ToString("0") FCFA</span>
 
-                <div class="bb-menu-footer">
-                    <span class="price">
-                        @menu.prix.ToString("0") FCFA
-                    </span>
+                @if (User.Identity?.IsAuthenticated ?? false)
+                {
+                    <form asp-controller="Panier" asp-action="AjouterMenuAuPanier" method="post">
+                        <input type="hidden" name="menuId" value="@menu.id" />
+                        <div class="mt-2">
+                            <label for="quantite-@menu.id" class="form-label">Quantité</label>
+                            <input type="number" id="quantite-@menu.id" name="quantite" value="1" min="1" class="form-control" style="width: 80px;" />
+                        </div>
+                        <button type="submit" class="order-btn mt-2">COMMANDER</button>
+                    </form>
+                }
+                else
+                {
+                    <a class="order-btn"
+                       href="@Url.Action("Login", "Auth", new { returnUrl = ViewContext.HttpContext.Request.Path })">
+                        Connectez-vous pour commander
+                    </a>
+                }
+            </div>
+        </div>
+    }
+}
 
-                    @if (User.Identity?.IsAuthenticated ?? false)
-                    {
-                        <form asp-controller="Panier" asp-action="AjouterMenuAuPanier" method="post">
-                            <input type="hidden" name="menuId" value="@menu.id" />
-
-                            <div class="mt-2">
-                                <label for="quantite-@menu.id" class="form-label">Quantité</label>
-                                <input type="number" id="quantite-@menu.id" name="quantite" value="1" min="1" class="form-control" style="width: 80px;" />
-                            </div>
-
-                            <button type="submit" class="order-btn mt-2">COMMANDER</button>
-                        </form>
-                    }
-                    else
-                    {
-                        <a class="order-btn"
-                           href="@Url.Action("Login", "Auth", new { returnUrl = ViewContext.HttpContext.Request.Path })">
-                            Connectez-vous pour commander
-                        </a>
-                    }
                 </div>
             </div>
         }

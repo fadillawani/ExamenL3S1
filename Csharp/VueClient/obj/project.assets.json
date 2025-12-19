@@ -15,19 +15,6 @@
           }
         }
       },
-      "Microsoft.AspNetCore.Authentication.Cookies/2.3.0": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/_._": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/netstandard2.0/_._": {
-            "related": ".xml"
-          }
-        }
-      },
       "Microsoft.Build/17.7.2": {
         "type": "package",
         "dependencies": {
@@ -892,19 +879,6 @@
         "lib/netstandard2.0/Humanizer.dll",
         "lib/netstandard2.0/Humanizer.xml",
         "logo.png"
-      ]
-    },
-    "Microsoft.AspNetCore.Authentication.Cookies/2.3.0": {
-      "sha512": "w3JPWHreXJ/Uv9CLkQtGCLwTbxZKY+94QPVi1RxcMuBTyRp+C9SdynznHEjnHWnw6QFNEHnBuHmWW3OYrvbpEQ==",
-      "type": "package",
-      "path": "microsoft.aspnetcore.authentication.cookies/2.3.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/netstandard2.0/Microsoft.AspNetCore.Authentication.Cookies.dll",
-        "lib/netstandard2.0/Microsoft.AspNetCore.Authentication.Cookies.xml",
-        "microsoft.aspnetcore.authentication.cookies.2.3.0.nupkg.sha512",
-        "microsoft.aspnetcore.authentication.cookies.nuspec"
       ]
     },
     "Microsoft.Build/17.7.2": {
@@ -2728,7 +2702,6 @@
   },
   "projectFileDependencyGroups": {
     "net10.0": [
-      "Microsoft.AspNetCore.Authentication.Cookies >= 2.3.0",
       "Microsoft.EntityFrameworkCore.Relational >= 10.0.1",
       "Microsoft.EntityFrameworkCore.Tools >= 10.0.1",
       "Npgsql >= 10.0.0",
@@ -2778,10 +2751,6 @@
       "net10.0": {
         "targetAlias": "net10.0",
         "dependencies": {
-          "Microsoft.AspNetCore.Authentication.Cookies": {
-            "target": "Package",
-            "version": "[2.3.0, )"
-          },
           "Microsoft.EntityFrameworkCore.Relational": {
             "target": "Package",
             "version": "[10.0.1, )"
@@ -3237,17 +3206,5 @@
         }
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1510",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Le PackageReference Microsoft.AspNetCore.Authentication.Cookies ne sera pas supprimé. Envisagez de retirer ce package de vos dépendances, car il est probablement inutile.",
-      "libraryId": "Microsoft.AspNetCore.Authentication.Cookies",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    }
-  ]
+  }
 }
