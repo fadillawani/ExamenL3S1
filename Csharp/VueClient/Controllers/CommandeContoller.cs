@@ -112,4 +112,28 @@ public class CommandeController : Controller
         var claim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
         return claim != null ? long.Parse(claim.Value) : 0;
     }
+
+        public async Task<IActionResult> Detail(long id)
+{
+    var commande = await _context.commande
+        .Include(c => c.Panier)
+            .ThenInclude(p => p.client)
+        .Include(c => c.Panier)
+            .ThenInclude(p => p.panier_item)
+                .ThenInclude(i => i.burger)
+        .Include(c => c.Panier)
+            .ThenInclude(p => p.panier_item)
+                .ThenInclude(i => i.menu)
+        .Include(c => c.Panier)
+            .ThenInclude(p => p.panier_item)
+                .ThenInclude(i => i.complement)
+        .Include(c => c.Paiement)
+        .FirstOrDefaultAsync(c => c.Id == id);
+
+    if (commande == null)
+        return NotFound();
+
+    return View(commande);
 }
+
+    }

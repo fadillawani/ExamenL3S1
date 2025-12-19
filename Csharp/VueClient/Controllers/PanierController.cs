@@ -6,7 +6,7 @@ using VueClient.ViewModel;
 using System.Security.Claims;
 using VueClient.Models;
 using Microsoft.AspNetCore.Authorization;
-
+[Authorize]
 public class PanierController : Controller
 {
     private readonly AppDbContext _context;

@@ -7,6 +7,7 @@ using VueClient.Models;
 using VueClient.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using VueClient.Models.Enum;
 
 namespace VueClient.Controllers
 {
@@ -33,9 +34,8 @@ namespace VueClient.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            // Chercher l'utilisateur par email ou téléphone
             var user = await _context.users
-                .FirstOrDefaultAsync(u => 
+                .FirstOrDefaultAsync(u =>
                     (u.email == model.Login || u.tel == model.Login) &&
                     (u.is_archived == null || u.is_archived == false)
                 );
@@ -46,16 +46,18 @@ namespace VueClient.Controllers
                 return View(model);
             }
 
-            // Vérifier le mot de passe
-            bool passwordOk = false;
+            bool passwordOk;
             try
             {
-                var result = _passwordHasher.VerifyHashedPassword(user, user.password, model.Password);
+                var result = _passwordHasher.VerifyHashedPassword(
+                    user,
+                    user.password,
+                    model.Password
+                );
                 passwordOk = result == PasswordVerificationResult.Success;
             }
             catch (FormatException)
             {
-                // Cas mot de passe en clair (si nécessaire pour démo/examen)
                 passwordOk = user.password == model.Password;
             }
 
@@ -65,27 +67,33 @@ namespace VueClient.Controllers
                 return View(model);
             }
 
-            // Créer les claims pour l'authentification
+            // ✅ CLAIMS CORRECTS
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.nom),
                 new Claim(ClaimTypes.Email, user.email),
                 new Claim("UserId", user.id.ToString()),
-                new Claim(ClaimTypes.Role, user.role ?? "")
+                new Claim(ClaimTypes.Role, user.role.ToString())
             };
 
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var claimsIdentity = new ClaimsIdentity(
+                claims,
+                CookieAuthenticationDefaults.AuthenticationScheme
+            );
+
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
-            // Se connecter avec cookie
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                claimsPrincipal
+            );
 
-            // Redirection selon le rôle
+            // ✅ SWITCH SUR ENUM
             return user.role switch
             {
-                "CLIENT" => RedirectToAction("Index", "Home"),
-                "GESTIONNAIRE" => RedirectToAction("Dashboard", "Gestionnaire"),
-                "LIVREUR" => RedirectToAction("Commandes", "Livreur"),
+                RoleUser.CLIENT => RedirectToAction("Index", "Home"),
+                RoleUser.Gestionnaire => RedirectToAction("Dashboard", "Gestionnaire"),
+                RoleUser.LIVREUR => RedirectToAction("Commandes", "Livreur"),
                 _ => RedirectToAction("Login")
             };
         }
@@ -93,8 +101,53 @@ namespace VueClient.Controllers
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme
+            );
             return RedirectToAction("Login");
         }
+
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+public async Task<IActionResult> Register(Users user)
+{
+    if (string.IsNullOrWhiteSpace(user.email) ||
+        string.IsNullOrWhiteSpace(user.password) ||
+        string.IsNullOrWhiteSpace(user.tel))
+    {
+        ModelState.AddModelError("", "Tous les champs sont obligatoires");
+        return View(user);
+    }
+
+    bool exists = await _context.users.AnyAsync(u =>
+        u.email == user.email || u.tel == user.tel
+    );
+
+    if (exists)
+    {
+        ModelState.AddModelError("", "Email ou téléphone déjà utilisé");
+        return View(user);
+    }
+
+    user.role = RoleUser.CLIENT;
+    user.is_archived = false;
+
+    // ✅ ICI LA CORRECTION
+    user.created_at = DateTime.Now;
+
+    user.password = _passwordHasher.HashPassword(user, user.password);
+
+    _context.users.Add(user);
+    await _context.SaveChangesAsync();
+
+    return RedirectToAction("Login");
+}
+
+
     }
 }

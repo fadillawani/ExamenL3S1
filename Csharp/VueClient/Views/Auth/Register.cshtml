@@ -1,0 +1,35 @@
+@model VueClient.Models.Users
+
+<div class="auth-register-container">
+    <div class="auth-register-tabs">
+        <a asp-action="Login" class="auth-register-tab">Connexion</a>
+        <span class="auth-register-tab auth-register-active">Inscription</span>
+    </div>
+
+    <div class="auth-register-card">
+        <h2>BON RETOUR !</h2>
+        <p class="auth-register-subtitle">Créez votre compte</p>
+
+        <form asp-action="Register" method="post">
+
+            <label>Email</label>
+            <input asp-for="email" type="email" class="auth-register-input" required />
+
+            <label>Téléphone</label>
+            <input asp-for="tel" class="auth-register-input" required />
+
+            <label>Nom</label>
+            <input asp-for="nom" class="auth-register-input" required />
+
+            <label>Prénom</label>
+            <input asp-for="prenom" class="auth-register-input" required />
+
+            <label>Mot de passe</label>
+            <input asp-for="password" type="password" class="auth-register-input" required />
+
+            <button type="submit" class="auth-register-btn">
+                INSCRIPTION
+            </button>
+        </form>
+    </div>
+</div>

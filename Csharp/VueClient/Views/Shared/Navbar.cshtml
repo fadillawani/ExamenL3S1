@@ -13,11 +13,26 @@
             <li><a href="/Burger">Burgers</a></li>
             <li><a href="/Menu">Menus</a></li>
             <li><a href="/Commande">Commandes</a></li>
+            <li><a href="/Panier">Panier</a></li>
+
         </ul>
 
         <!-- Actions -->
         <div class="bb-nav-actions">
-            <a href="/Auth/Login" class="bb-btn-outline">Connexion</a>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <!-- Déconnexion -->
+                <form method="post" asp-controller="Auth" asp-action="Logout" style="display:inline;">
+                    <button type="submit" class="bb-btn-outline">Déconnexion</button>
+                </form>
+
+                
+            }
+            else
+            {
+                <!-- Connexion -->
+                <a href="/Auth/Login" class="bb-btn-outline">Connexion</a>
+            }
         </div>
 
     </div>

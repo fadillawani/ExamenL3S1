@@ -1,0 +1,99 @@
+@model VueClient.Models.Commande
+
+@{
+    ViewData["Title"] = "Détails de la commande";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+    <hr />
+
+    <!-- Informations générales -->
+    <div class="card mb-4">
+        <div class="card-header">
+            Informations de la commande
+        </div>
+        <div class="card-body">
+            <p><strong>ID :</strong> @Model.Id</p>
+            <p><strong>Date :</strong> @Model.DateCommande.ToString("dd/MM/yyyy HH:mm")</p>
+            <p><strong>Statut :</strong> @Model.Etat</p>
+            <p><strong>Prix total :</strong> @Model.PrixTotal FCFA</p>
+        </div>
+    </div>
+
+    <!-- Informations client -->
+    <div class="card mb-4">
+        <div class="card-header">Client</div>
+        <div class="card-body">
+            @if (Model.Panier?.client != null)
+            {
+                <p><strong>Nom :</strong> @Model.Panier.client.nom @Model.Panier.client.prenom</p>
+                <p><strong>Email :</strong> @Model.Panier.client.email</p>
+                <p><strong>Téléphone :</strong> @Model.Panier.client.tel</p>
+            }
+            else
+            {
+                <p class="text-muted">Client inconnu</p>
+            }
+        </div>
+    </div>
+
+    <!-- Articles -->
+    <div class="card mb-4">
+        <div class="card-header">Articles de la commande</div>
+        <div class="card-body">
+            @if (Model.Panier?.panier_item != null && Model.Panier.panier_item.Any())
+            {
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Produit</th>
+                            <th>Type</th>
+                            <th>Quantité</th>
+                            <th>Prix</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Panier.panier_item)
+                        {
+                            <tr>
+                                <td>
+                                    @(item.burger?.libelle 
+                                      ?? item.menu?.libelle 
+                                      ?? item.complement?.libelle)
+                                </td>
+                                <td>
+                                    @(item.burger != null ? "Burger"
+                                      : item.menu != null ? "Menu"
+                                      : "Complément")
+                                </td>
+                                <td>@item.quantite</td>
+                                <td>@item.prix_total FCFA</td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="text-muted">Aucun article dans cette commande.</p>
+            }
+        </div>
+    </div>
+
+    <!-- Paiement -->
+    @if (Model.Paiement != null)
+    {
+        <div class="card mb-4">
+            <div class="card-header">Paiement</div>
+            <div class="card-body">
+                <p><strong>Moyen :</strong> @Model.Paiement.MoyenPaiement</p>
+                <p><strong>Référence :</strong> @Model.Paiement.ref_transaction</p>
+<p><strong>Date :</strong> @Model.Paiement.date</p>
+            </div>
+        </div>
+    }
+
+    <a asp-action="Index" class="btn btn-secondary">Retour</a>
+</div>
