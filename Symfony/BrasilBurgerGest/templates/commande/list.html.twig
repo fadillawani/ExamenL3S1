@@ -1,0 +1,113 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+<div class="container mt-5">
+
+  <!-- Titre -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">Liste des Commandes</h2>
+  </div>
+
+  {% include 'components/messagesflash.html.twig' %}
+
+  <!-- Tableau des commandes -->
+  <div class="card shadow-sm rounded-4 p-3">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>N°</th>
+            <th>Date</th>
+            <th>Client</th>
+            <th>Prix total</th>
+            <th>Statut</th>
+            <th>Paiement</th>
+            <th>Livraison</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+        {% for commande in commandes %}
+          <tr>
+            <td>{{ commande.id }}</td>
+
+            <td>
+              {{ commande.datecommande|date('d/m/Y H:i') }}
+            </td>
+
+            <td>
+              {{ commande.client.email ?? '—' }}
+            </td>
+
+            <td>
+              {{ commande.prixtotal|number_format(0, ',', ' ') }} FCFA
+            </td>
+
+            <td>
+              {% if commande.etat.value == 'EN_ATTENTE' %}
+                <span class="badge bg-warning text-dark">En attente</span>
+              {% elseif commande.etat.value == 'PAYEE' %}
+                <span class="badge bg-success">Payée</span>
+              {% elseif commande.etat.value == 'ANNULEE' %}
+                <span class="badge bg-danger">Annulée</span>
+              {% else %}
+                <span class="badge bg-secondary">{{ commande.etat.value }}</span>
+              {% endif %}
+            </td>
+
+            <td>
+              {% if commande.paiements|length > 0 %}
+                <span class="badge bg-success">Oui</span>
+              {% else %}
+                <span class="badge bg-secondary">Non</span>
+              {% endif %}
+            </td>
+
+            <td>
+              {% if commande.livraisonAffectations|length > 0 %}
+                <span class="badge bg-success">Affectée</span>
+              {% else %}
+                <span class="badge bg-warning text-dark">En attente</span>
+              {% endif %}
+            </td>
+
+            <td>
+              <!-- Détails -->
+              <a href="{{ path('app_commande_show', {id: commande.id}) }}"
+                 class="btn btn-sm btn-primary me-1">
+                <i class="bi bi-eye"></i>
+              </a>
+
+              <!-- Changer statut -->
+              <a href="{{ path('app_commande_change_status', {id: commande.id}) }}"
+                 class="btn btn-sm btn-warning me-1">
+                <i class="bi bi-arrow-repeat"></i>
+              </a>
+            </td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="8" class="text-center text-muted">
+              Aucune commande trouvée
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  {% include 'components/pagination.html.twig' with {
+    currentPage: currentPage,
+    nbPages: nbPages,
+    route: paginationRoute,
+    params: paginationParams
+  } %}
+
+</div>
+
+{% endblock %}
