@@ -25,25 +25,35 @@
                 {% endif %}
 
                 <form method="post" action="{{ path('app_login') }}">
-                    {# CSRF token obligatoire #}
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+    {# CSRF token obligatoire #}
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-                    <div class="form-group mb-3">
-                        <label for="inputEmail" class="fw-semibold">Email</label>
-                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail"
-                               class="form-control" autocomplete="email" required autofocus>
-                    </div>
+    <div class="form-group mb-3">
+        <label for="inputEmail" class="fw-semibold">Email</label>
+        <input type="email" value="{{ last_username }}" name="email" id="inputEmail"
+               class="form-control" autocomplete="email" required autofocus>
+    </div>
 
-                    <div class="form-group mb-4">
-                        <label for="inputPassword" class="fw-semibold">Mot de passe</label>
-                        <input type="password" name="password" id="inputPassword"
-                               class="form-control" autocomplete="current-password" required>
-                    </div>
+    <div class="form-group mb-3">
+        <label for="inputRole" class="fw-semibold">Rôle</label>
+        <select name="role" id="inputRole" class="form-select" required>
+            <option value="">-- Sélectionner un rôle --</option>
+            <option value="Gestionnaire">Administrateur</option>
+            
+        </select>
+    </div>
 
-                    <button class="btn btn-primary w-100 py-2" type="submit">
-                        Se connecter
-                    </button>
-                </form>
+    <div class="form-group mb-4">
+        <label for="inputPassword" class="fw-semibold">Mot de passe</label>
+        <input type="password" name="password" id="inputPassword"
+               class="form-control" autocomplete="current-password" required>
+    </div>
+
+    <button class="btn btn-primary w-100 py-2" type="submit">
+        Se connecter
+    </button>
+</form>
+
 
             </div>
         </div>

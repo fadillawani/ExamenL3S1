@@ -6,10 +6,12 @@ use App\Entity\Enum\RoleUser;
 use App\Repository\UsersRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
-class Users
+class Users implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id, ORM\GeneratedValue, ORM\Column(type:"bigint")]
     private ?int $id = null;
@@ -17,25 +19,25 @@ class Users
     #[ORM\Column(type:"string", length: 150)]
     private ?string $nom = null;
 
-    #[ORM\Column(type:"string", length: 150)]
-    private ?string $prenon = null;
+    #[ORM\Column(name:"prenom", type:"string", length: 150)]
+    private ?string $prenom = null;
 
-    #[ORM\Column(type:"string", length: 50)]
+    #[ORM\Column(name:"tel", type:"string", length: 50)]
     private ?string $tel = null;
 
     #[ORM\Column(name:"created_at", type:"datetime", nullable:true)]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?\DateTime $createdAt = null;
 
     #[ORM\Column(enumType: RoleUser::class)]
     private ?RoleUser $role = null;
 
-    #[ORM\Column]
+    #[ORM\Column(name:"is_archived", type:"boolean", options:["default" => false])]
     private ?bool $isArchived = null;
 
     /**
      * @var Collection<int, Panier>
      */
-    #[ORM\OneToMany( mappedBy: "client", targetEntity: Panier::class)]
+    #[ORM\OneToMany(mappedBy: "client", targetEntity: Panier::class)]
     private Collection $paniers;
 
     /**
@@ -53,7 +55,7 @@ class Users
     #[ORM\Column(type:"string", length: 255)]
     private ?string $email = null;
 
-    #[ORM\Column(type:"string", length: 50)]
+    #[ORM\Column(type:"string", length: 255)]
     private ?string $password = null;
 
     public function __construct()
@@ -62,6 +64,8 @@ class Users
         $this->commandes = new ArrayCollection();
         $this->livraisonAffectations = new ArrayCollection();
     }
+
+    // --- GETTERS & SETTERS ---
 
     public function getId(): ?int
     {
@@ -76,19 +80,17 @@ class Users
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
-
         return $this;
     }
 
-    public function getPrenon(): ?string
+    public function getPrenom(): ?string
     {
-        return $this->prenon;
+        return $this->prenom;
     }
 
-    public function setPrenon(string $prenon): static
+    public function setPrenom(string $prenom): static
     {
-        $this->prenon = $prenon;
-
+        $this->prenom = $prenom;
         return $this;
     }
 
@@ -100,19 +102,17 @@ class Users
     public function setTel(string $tel): static
     {
         $this->tel = $tel;
-
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(?\DateTime $createdAt): static
     {
         $this->createdAt = $createdAt;
-
         return $this;
     }
 
@@ -124,7 +124,6 @@ class Users
     public function setRole(RoleUser $role): static
     {
         $this->role = $role;
-
         return $this;
     }
 
@@ -136,13 +135,11 @@ class Users
     public function setIsArchived(bool $isArchived): static
     {
         $this->isArchived = $isArchived;
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, Panier>
-     */
+    // --- Collections ---
+
     public function getPaniers(): Collection
     {
         return $this->paniers;
@@ -154,25 +151,19 @@ class Users
             $this->paniers->add($panier);
             $panier->setClient($this);
         }
-
         return $this;
     }
 
     public function removePanier(Panier $panier): static
     {
         if ($this->paniers->removeElement($panier)) {
-            // set the owning side to null (unless already changed)
             if ($panier->getClient() === $this) {
                 $panier->setClient(null);
             }
         }
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, Commande>
-     */
     public function getCommandes(): Collection
     {
         return $this->commandes;
@@ -184,25 +175,19 @@ class Users
             $this->commandes->add($commande);
             $commande->setClient($this);
         }
-
         return $this;
     }
 
     public function removeCommande(Commande $commande): static
     {
         if ($this->commandes->removeElement($commande)) {
-            // set the owning side to null (unless already changed)
             if ($commande->getClient() === $this) {
                 $commande->setClient(null);
             }
         }
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, LivraisonAffectation>
-     */
     public function getLivraisonAffectations(): Collection
     {
         return $this->livraisonAffectations;
@@ -214,19 +199,16 @@ class Users
             $this->livraisonAffectations->add($livraisonAffectation);
             $livraisonAffectation->setLivreur($this);
         }
-
         return $this;
     }
 
     public function removeLivraisonAffectation(LivraisonAffectation $livraisonAffectation): static
     {
         if ($this->livraisonAffectations->removeElement($livraisonAffectation)) {
-            // set the owning side to null (unless already changed)
             if ($livraisonAffectation->getLivreur() === $this) {
                 $livraisonAffectation->setLivreur(null);
             }
         }
-
         return $this;
     }
 
@@ -238,19 +220,38 @@ class Users
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
-    }
-
-    public function getPassword(): ?string
-    {
-        return $this->password;
     }
 
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
+    }
+
+    // --- Symfony UserInterface ---
+
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
+    }
+
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function getRoles(): array
+    {
+        if ($this->role === null) {
+        return ['ROLE_USER'];
+    }
+
+        return ['ROLE_' . $this->role->value];
+    }
+
+    public function eraseCredentials(): void
+    {
+        // Aucun champ sensible temporaire
     }
 }
