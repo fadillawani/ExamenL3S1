@@ -8,7 +8,7 @@ FROM php:8.2-cli
 # =========================
 ENV APP_ENV=prod
 ENV APP_DEBUG=0
-ENV PORT=10000
+ENV PORT=${PORT:-10000}
 
 # =========================
 # Dépendances système et extensions PHP
@@ -61,7 +61,8 @@ COPY . .
 # Créer les dossiers nécessaires et définir les permissions
 # =========================
 RUN mkdir -p var/cache var/log var/sessions \
-    && chmod -R 775 var
+    && chmod -R 775 var \
+    && chown -R www-data:www-data var
 
 # =========================
 # Cache Symfony en prod
@@ -77,4 +78,4 @@ EXPOSE ${PORT}
 # =========================
 # Lancer le serveur PHP intégré Symfony
 # =========================
-CMD ["sh", "-c", "php -S 0.0.0.0:${PORT} -t public"]
+CMD ["sh", "-c", "php -S 0.0.0.0:${PORT} -t public public/index.php"]
