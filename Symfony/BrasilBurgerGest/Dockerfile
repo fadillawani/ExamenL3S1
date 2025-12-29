@@ -1,17 +1,17 @@
 # =========================
-# Image de base PHP + Apache
+# Image de base PHP CLI
 # =========================
-FROM php:8.2-apache
+FROM php:8.2-cli
 
 # =========================
-# Variables d’environnement
+# Variables d'environnement
 # =========================
 ENV APP_ENV=prod
 ENV APP_DEBUG=0
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+ENV PORT=10000
 
 # =========================
-# Dépendances système
+# Dépendances système et extensions PHP
 # =========================
 RUN apt-get update && apt-get install -y \
     git \
@@ -21,19 +21,11 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     zip \
     && docker-php-ext-install \
-    pdo \
-    pdo_pgsql \
-    intl \
-    zip \
-    opcache
-
-# =========================
-# Configuration Apache
-# =========================
-RUN a2enmod rewrite
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
-    /etc/apache2/sites-available/*.conf \
-    /etc/apache2/apache2.conf
+        pdo \
+        pdo_pgsql \
+        intl \
+        zip \
+        opcache
 
 # =========================
 # Installer Composer
@@ -41,23 +33,24 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # =========================
-# Dossier de travail
+# Définir le dossier de travail
 # =========================
-WORKDIR /var/www/html
+WORKDIR /app
 
 # =========================
-# Copier uniquement les fichiers Composer pour optimiser le cache Docker
+# Copier seulement Composer pour le cache Docker
 # =========================
-COPY composer.json symfony.lock ./
+COPY composer.json composer.lock ./
 
 # =========================
-# Installer les dépendances PHP
+# Installer les dépendances sans dev ni scripts
 # =========================
 RUN composer install \
     --no-dev \
     --no-interaction \
     --prefer-dist \
-    --optimize-autoloader
+    --optimize-autoloader \
+    --no-scripts
 
 # =========================
 # Copier tout le projet
@@ -68,29 +61,20 @@ COPY . .
 # Créer les dossiers nécessaires et définir les permissions
 # =========================
 RUN mkdir -p var/cache var/log var/sessions \
-    && chown -R www-data:www-data var public \
-    && chmod -R 775 var \
-    && chmod -R 755 public
-
-# =========================
-# S'assurer que le fichier .htaccess existe
-# =========================
-RUN if [ ! -f public/.htaccess ]; then \
-        cp vendor/symfony/symfony/src/Symfony/Bundle/FrameworkBundle/Resources/config/router.xml public/.htaccess; \
-    fi
+    && chmod -R 775 var
 
 # =========================
 # Cache Symfony en prod
 # =========================
 RUN php bin/console cache:clear --env=prod \
-    && php bin/console cache:warmup --env=prod
+    && php bin/console cache:warmup
 
 # =========================
-# Port exposé pour Render
+# Exposer le port pour Render
 # =========================
-EXPOSE 80
+EXPOSE ${PORT}
 
 # =========================
-# Lancement d’Apache
+# Lancer le serveur PHP intégré Symfony
 # =========================
-CMD ["apache2-foreground"]
+CMD ["sh", "-c", "php -S 0.0.0.0:${PORT} -t public"]
