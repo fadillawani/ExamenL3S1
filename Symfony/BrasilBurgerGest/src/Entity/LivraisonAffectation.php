@@ -15,7 +15,7 @@ class LivraisonAffectation
     #[ORM\Column(enumType: StatutLivraison::class)]
     private ?StatutLivraison $statut = null;
 
-    #[ORM\ManyToOne(targetEntity:Commande::class)]
+    #[ORM\ManyToOne(targetEntity: Commande::class, inversedBy: "livraisonAffectations")]
     #[ORM\JoinColumn(nullable:true, name:"commande_id", referencedColumnName:"id")]
     private ?Commande $commande = null;
 

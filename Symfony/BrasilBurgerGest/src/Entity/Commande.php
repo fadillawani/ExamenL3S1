@@ -34,14 +34,14 @@ class Commande
     /**
      * @var Collection<int, Paiement>
      */
-    #[ORM\ManyToOne(targetEntity:Paiement::class)]
+    #[ORM\OneToMany(targetEntity:Paiement::class, mappedBy:"commande")]
     #[ORM\JoinColumn(nullable:true, name:"paiement_id", referencedColumnName:"id")]
     private Collection $paiements;
 
     /**
      * @var Collection<int, LivraisonAffectation>
      */
-    #[ORM\ManyToOne(targetEntity:LivraisonAffectation::class)]
+    #[ORM\OneToMany(mappedBy: "commande", targetEntity: LivraisonAffectation::class)]
     #[ORM\JoinColumn(nullable:true, name:"livraison_affectation_id", referencedColumnName:"id")]
     private Collection $livraisonAffectations;
 

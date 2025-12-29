@@ -1,0 +1,43 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+<div class="commande-container">
+
+    <h1>Détails de la commande #{{ commande.id }}</h1>
+
+    <div class="section">
+        <p><strong>Date :</strong> {{ commande.dateCommande|date('d/m/Y H:i') }}</p>
+        <p><strong>Prix total :</strong> {{ commande.prixTotal|number_format(0, ',', ' ') }} FCFA</p>
+        <p><strong>État :</strong> {{ commande.etat }}</p>
+    </div>
+
+    <div class="section">
+        <h2>Client</h2>
+        <p><strong>Nom :</strong> {{ commande.clientNom }}</p>
+        <p><strong>Email :</strong> {{ commande.clientEmail }}</p>
+    </div>
+
+    <div class="section">
+        <h2>Paiements</h2>
+
+        {% if commande.paiements is empty %}
+            <p class="empty">Aucun paiement enregistré.</p>
+        {% else %}
+            {% for paiement in commande.paiements %}
+                <div class="paiement-item">
+                    <p><strong>ID :</strong> {{ paiement.id }}</p>
+                    <p><strong>Montant :</strong> {{ paiement.montant }} FCFA</p>
+                    <p><strong>Date :</strong>
+                        {% if paiement.date is not null %}
+                            {{ paiement.date|date('d/m/Y H:i') }}
+                        {% else %}
+                            Date non renseignée
+                        {% endif %}
+                    </p>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

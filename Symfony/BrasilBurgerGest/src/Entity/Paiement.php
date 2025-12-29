@@ -21,7 +21,7 @@ class Paiement
     #[ORM\Column(type:"datetime", nullable:true)]
     private ?\DateTime $date = null;
 
-    #[ORM\Column(enumType: MoyenPaiement::class)]
+    #[ORM\Column(name: "moyen_paiement", enumType: MoyenPaiement::class, type: "string", length: 50)]
     private ?MoyenPaiement $moyenpaiement = null;
 
     #[ORM\ManyToOne(targetEntity:Commande::class)]
