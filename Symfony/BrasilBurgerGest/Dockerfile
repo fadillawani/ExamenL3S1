@@ -81,7 +81,6 @@ RUN php bin/console cache:clear --env=prod \
 # =========================
 EXPOSE 80
 
-# =========================
-# Lancement Apache
-# =========================
+
 CMD ["apache2-foreground"]
+
