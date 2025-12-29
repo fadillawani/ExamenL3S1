@@ -1,0 +1,87 @@
+# =========================
+# Image de base PHP + Apache
+# =========================
+FROM php:8.2-apache
+
+# =========================
+# Variables d’environnement
+# =========================
+ENV APP_ENV=prod
+ENV APP_DEBUG=0
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+
+# =========================
+# Dépendances système
+# =========================
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    libpq-dev \
+    libicu-dev \
+    libzip-dev \
+    zip \
+    && docker-php-ext-install \
+    pdo \
+    pdo_pgsql \
+    intl \
+    zip \
+    opcache
+
+# =========================
+# Configuration Apache
+# =========================
+RUN a2enmod rewrite
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
+    /etc/apache2/sites-available/*.conf \
+    /etc/apache2/apache2.conf
+
+# =========================
+# Installer Composer
+# =========================
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# =========================
+# Dossier de travail
+# =========================
+WORKDIR /var/www/html
+
+# =========================
+# Copier les fichiers Composer
+# =========================
+COPY composer.json symfony.lock ./
+
+# =========================
+# Installer les dépendances PHP (prod uniquement)
+# =========================
+RUN composer install \
+    --no-dev \
+    --no-interaction \
+    --prefer-dist \
+    --optimize-autoloader
+
+# =========================
+# Copier le reste du projet
+# =========================
+COPY . .
+
+# =========================
+# Permissions Symfony
+# =========================
+RUN chown -R www-data:www-data var \
+    && chmod -R 775 var
+
+# =========================
+# Cache Symfony en prod
+# =========================
+RUN php bin/console cache:clear --env=prod \
+    && php bin/console cache:warmup
+
+# =========================
+# Port exposé pour Render
+# =========================
+EXPOSE 80
+
+# =========================
+# Lancement Apache
+# =========================
+CMD ["apache2-foreground"]

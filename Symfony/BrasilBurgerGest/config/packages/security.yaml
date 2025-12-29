@@ -22,5 +22,6 @@ security:
             entry_point: App\Security\UsersAuthenticator # <--- Important !
             logout:
                 path: app_logout
+                target: app_login
     access_control:
         - { path: ^/admin, roles: ROLE_GESTIONNAIRE }
