@@ -46,7 +46,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 # =========================
-# Copier uniquement composer files pour optimiser le cache Docker
+# Copier uniquement les fichiers Composer pour optimiser le cache Docker
 # =========================
 COPY composer.json symfony.lock ./
 
@@ -66,9 +66,10 @@ RUN composer install \
 COPY . .
 
 # =========================
-# Permissions Symfony
+# Créer les dossiers nécessaires et définir les permissions
 # =========================
-RUN chown -R www-data:www-data var \
+RUN mkdir -p var/cache var/log var/sessions \
+    && chown -R www-data:www-data var \
     && chmod -R 775 var
 
 # =========================
