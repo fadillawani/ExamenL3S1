@@ -46,21 +46,22 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 # =========================
-# Copier les fichiers Composer
+# Copier uniquement composer files pour optimiser le cache Docker
 # =========================
 COPY composer.json symfony.lock ./
 
 # =========================
-# Installer les dépendances PHP (prod uniquement)
+# Installer les dépendances PHP sans scripts (évite l’erreur bin/console)
 # =========================
 RUN composer install \
     --no-dev \
     --no-interaction \
     --prefer-dist \
-    --optimize-autoloader
+    --optimize-autoloader \
+    --no-scripts
 
 # =========================
-# Copier le reste du projet
+# Copier tout le projet
 # =========================
 COPY . .
 
@@ -81,6 +82,7 @@ RUN php bin/console cache:clear --env=prod \
 # =========================
 EXPOSE 80
 
-
+# =========================
+# Lancement d’Apache
+# =========================
 CMD ["apache2-foreground"]
-
