@@ -51,14 +51,13 @@ WORKDIR /var/www/html
 COPY composer.json symfony.lock ./
 
 # =========================
-# Installer les dépendances PHP sans scripts (évite l’erreur bin/console)
+# Installer les dépendances PHP
 # =========================
 RUN composer install \
     --no-dev \
     --no-interaction \
     --prefer-dist \
-    --optimize-autoloader \
-    --no-scripts
+    --optimize-autoloader
 
 # =========================
 # Copier tout le projet
@@ -69,14 +68,22 @@ COPY . .
 # Créer les dossiers nécessaires et définir les permissions
 # =========================
 RUN mkdir -p var/cache var/log var/sessions \
-    && chown -R www-data:www-data var \
-    && chmod -R 775 var
+    && chown -R www-data:www-data var public \
+    && chmod -R 775 var \
+    && chmod -R 755 public
+
+# =========================
+# S'assurer que le fichier .htaccess existe
+# =========================
+RUN if [ ! -f public/.htaccess ]; then \
+        cp vendor/symfony/symfony/src/Symfony/Bundle/FrameworkBundle/Resources/config/router.xml public/.htaccess; \
+    fi
 
 # =========================
 # Cache Symfony en prod
 # =========================
 RUN php bin/console cache:clear --env=prod \
-    && php bin/console cache:warmup
+    && php bin/console cache:warmup --env=prod
 
 # =========================
 # Port exposé pour Render
