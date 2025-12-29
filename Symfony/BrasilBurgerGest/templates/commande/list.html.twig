@@ -9,6 +9,49 @@
     <h2 class="fw-bold">Liste des commandes</h2>
   </div>
 
+  <div class="card shadow-sm rounded-4 p-3 mb-4">
+  <h5 class="fw-bold mb-3">Filtres</h5>
+
+  {{ form_start(filterForm, { method: 'get' }) }}
+
+  <div class="row g-3">
+
+    <div class="col-md-3">
+      {{ form_label(filterForm.statut) }}
+      {{ form_widget(filterForm.statut, { attr: { class: 'form-select' } }) }}
+    </div>
+
+    <div class="col-md-3">
+      {{ form_label(filterForm.client) }}
+      {{ form_widget(filterForm.client, { attr: { class: 'form-select' } }) }}
+    </div>
+
+    <div class="col-md-3">
+      {{ form_label(filterForm.dateDebut) }}
+      {{ form_widget(filterForm.dateDebut, { attr: { class: 'form-control' } }) }}
+    </div>
+
+    <div class="col-md-3">
+      {{ form_label(filterForm.dateFin) }}
+      {{ form_widget(filterForm.dateFin, { attr: { class: 'form-control' } }) }}
+    </div>
+
+  </div>
+
+  <div class="mt-3 text-end">
+    <button type="submit" class="btn btn-primary">
+      <i class="bi bi-funnel"></i> Filtrer
+    </button>
+
+    <a href="{{ path('app_commande_list') }}" class="btn btn-secondary">
+      Réinitialiser
+    </a>
+  </div>
+
+  {{ form_end(filterForm) }}
+</div>
+
+
   {% include 'components/messagesflash.html.twig' %}
 
   <!-- Tableau -->

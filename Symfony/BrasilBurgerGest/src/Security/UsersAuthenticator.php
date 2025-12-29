@@ -49,7 +49,7 @@ class UsersAuthenticator extends AbstractLoginFormAuthenticator
         }
 
         // Redirection par défaut après login réussi
-        return new RedirectResponse($this->urlGenerator->generate('app_commande_list')); // change 'app_dashboard' si besoin
+        return new RedirectResponse($this->urlGenerator->generate('app_dashboard')); // change 'app_dashboard' si besoin
     }
 
     protected function getLoginUrl(Request $request): string

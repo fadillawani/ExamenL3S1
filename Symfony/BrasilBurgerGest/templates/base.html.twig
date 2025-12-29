@@ -37,26 +37,16 @@
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                     <a class="nav-link text-white" href="{{ path('app_commande_list') }}">
-                        <i class="bi bi-receipt"></i> Commandes
+                        </i> Commandes
                     </a>
                 </li>
-
-                {# Exemple futur #}
-                {# 
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="{{ path('app_produit_list') }}">
-                        <i class="bi bi-basket"></i> Produits
+                    <a class="nav-link text-white" href="{{ path('app_dashboard') }}">
+                        </i> Statistiques
                     </a>
                 </li>
-                #}
 
-                {% if is_granted('ROLE_ADMIN') %}
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">
-                            <i class="bi bi-gear"></i> Administration
-                        </a>
-                    </li>
-                {% endif %}
+              
             </ul>
 
             <!-- UTILISATEUR -->
